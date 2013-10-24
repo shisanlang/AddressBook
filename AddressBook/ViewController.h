@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<ABPeoplePickerNavigationControllerDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    UITableView * tableView;
+    NSMutableArray * AllPerson;
+}
+
+@property(nonatomic,retain) NSMutableArray * AllPerson;
 
 @end
