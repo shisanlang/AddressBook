@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4CC965F7-FB13-4B3C-A02D-680E1E3C4DBE</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AddressBook</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0CC92BA2-EB0D-42C3-AE29-CF30D9397363</key>
+		<string>ssh://github.com/shisanlang/AddressBook.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>AddressBook.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0CC92BA2-EB0D-42C3-AE29-CF30D9397363</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/shisanlang/AddressBook.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0CC92BA2-EB0D-42C3-AE29-CF30D9397363</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0CC92BA2-EB0D-42C3-AE29-CF30D9397363</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AddressBook</string>
+		</dict>
+	</array>
+</dict>
+</plist>
