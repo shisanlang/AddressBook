@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E30F35D51820A3A200F555C6 /* AddressListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E30F35D41820A3A200F555C6 /* AddressListCell.m */; };
+		E30F35D81820A72A00F555C6 /* AddressLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E30F35D71820A72A00F555C6 /* AddressLineCell.m */; };
 		E355B3B118177DC80060F504 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E355B3B018177DC80060F504 /* AddressBook.framework */; };
 		E355B3B318177DD10060F504 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E355B3B218177DD10060F504 /* AddressBookUI.framework */; };
 		E355B3B6181A5C0C0060F504 /* transparent_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E355B3B4181A5C0C0060F504 /* transparent_bg.png */; };
@@ -17,7 +19,6 @@
 		E3DE637917F3EB5900021BA1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E3DE637717F3EB5900021BA1 /* InfoPlist.strings */; };
 		E3DE637B17F3EB5900021BA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E3DE637A17F3EB5900021BA1 /* main.m */; };
 		E3DE637F17F3EB5900021BA1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E3DE637E17F3EB5900021BA1 /* AppDelegate.m */; };
-		E3DE638217F3EB5900021BA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3DE638017F3EB5900021BA1 /* Main.storyboard */; };
 		E3DE638517F3EB5900021BA1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3DE638417F3EB5900021BA1 /* ViewController.m */; };
 		E3DE638717F3EB5900021BA1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3DE638617F3EB5900021BA1 /* Images.xcassets */; };
 		E3DE638E17F3EB5900021BA1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3DE638D17F3EB5900021BA1 /* XCTest.framework */; };
@@ -41,6 +42,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E30F35D2181FC1B100F555C6 /* BaseToolbar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseToolbar.h; sourceTree = "<group>"; };
+		E30F35D31820A3A200F555C6 /* AddressListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressListCell.h; sourceTree = "<group>"; };
+		E30F35D41820A3A200F555C6 /* AddressListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressListCell.m; sourceTree = "<group>"; };
+		E30F35D61820A72A00F555C6 /* AddressLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressLineCell.h; sourceTree = "<group>"; };
+		E30F35D71820A72A00F555C6 /* AddressLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressLineCell.m; sourceTree = "<group>"; };
 		E355B3B018177DC80060F504 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		E355B3B218177DD10060F504 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		E355B3B4181A5C0C0060F504 /* transparent_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparent_bg.png; sourceTree = "<group>"; };
@@ -55,7 +61,6 @@
 		E3DE637C17F3EB5900021BA1 /* AddressBook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AddressBook-Prefix.pch"; sourceTree = "<group>"; };
 		E3DE637D17F3EB5900021BA1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E3DE637E17F3EB5900021BA1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E3DE638117F3EB5900021BA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E3DE638317F3EB5900021BA1 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		E3DE638417F3EB5900021BA1 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E3DE638617F3EB5900021BA1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -64,7 +69,6 @@
 		E3DE639517F3EB5900021BA1 /* AddressBookTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AddressBookTests-Info.plist"; sourceTree = "<group>"; };
 		E3DE639717F3EB5900021BA1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E3DE639917F3EB5900021BA1 /* AddressBookTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressBookTests.m; sourceTree = "<group>"; };
-		E3DE63A317F3ECAD00021BA1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		E3DE63A417F3ECAD00021BA1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E3DE63A517F3ECAD00021BA1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E3DE63A617F3EDAC00021BA1 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -143,11 +147,15 @@
 				E355B3B5181A5C0C0060F504 /* transparent_bg@2x.png */,
 				E3DE637D17F3EB5900021BA1 /* AppDelegate.h */,
 				E3DE637E17F3EB5900021BA1 /* AppDelegate.m */,
-				E3DE638017F3EB5900021BA1 /* Main.storyboard */,
 				E3DE638317F3EB5900021BA1 /* ViewController.h */,
 				E3DE638417F3EB5900021BA1 /* ViewController.m */,
 				E3DE638617F3EB5900021BA1 /* Images.xcassets */,
 				E3DE637517F3EB5900021BA1 /* Supporting Files */,
+				E30F35D2181FC1B100F555C6 /* BaseToolbar.h */,
+				E30F35D31820A3A200F555C6 /* AddressListCell.h */,
+				E30F35D41820A3A200F555C6 /* AddressListCell.m */,
+				E30F35D61820A72A00F555C6 /* AddressLineCell.h */,
+				E30F35D71820A72A00F555C6 /* AddressLineCell.m */,
 			);
 			path = AddressBook;
 			sourceTree = "<group>";
@@ -260,7 +268,6 @@
 			files = (
 				E3DE638717F3EB5900021BA1 /* Images.xcassets in Resources */,
 				E3DE637917F3EB5900021BA1 /* InfoPlist.strings in Resources */,
-				E3DE638217F3EB5900021BA1 /* Main.storyboard in Resources */,
 				E355B3B6181A5C0C0060F504 /* transparent_bg.png in Resources */,
 				E355B3B7181A5C0C0060F504 /* transparent_bg@2x.png in Resources */,
 			);
@@ -283,7 +290,9 @@
 			files = (
 				E3DE638517F3EB5900021BA1 /* ViewController.m in Sources */,
 				E3DE637F17F3EB5900021BA1 /* AppDelegate.m in Sources */,
+				E30F35D51820A3A200F555C6 /* AddressListCell.m in Sources */,
 				E3DE637B17F3EB5900021BA1 /* main.m in Sources */,
+				E30F35D81820A72A00F555C6 /* AddressLineCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,15 +322,6 @@
 				E3DE63A417F3ECAD00021BA1 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		E3DE638017F3EB5900021BA1 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E3DE638117F3EB5900021BA1 /* Base */,
-				E3DE63A317F3ECAD00021BA1 /* zh-Hans */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		E3DE639617F3EB5900021BA1 /* InfoPlist.strings */ = {
@@ -369,7 +369,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -402,7 +402,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

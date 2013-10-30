@@ -15,7 +15,9 @@
 //#import <CoreTelephony/CTCallCenter.h>
 //#import <CoreTelephony/CTSubscriber.h>
 //#import <CoreTelephony/CTSubscriberInfo.h>
-
+#import "BaseToolbar.h"
+#import "AddressLineCell.h"
+#import "AddressListCell.h"
 
 
 
@@ -46,38 +48,71 @@
     self.title = @"我的通讯录";
 
     
-    [self setEdgesForExtendedLayout:UIRectEdgeNone];
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
          [self.view.window setBackgroundColor:[UIColor whiteColor]];
 //        self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
         self.edgesForExtendedLayout = UIRectEdgeNone;
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
     
     if (XD_IOS7) {
         self.navigationController.navigationBar.translucent = NO;
     }
     
-    //
-    countLabel = [[UILabel alloc]init];
-    countLabel.frame = CGRectMake(10, 20, 50, 24);
-    countLabel.text = @"0条";
-    [self.view addSubview:countLabel];
+    //nav
+    BaseToolbar * tools = [[BaseToolbar alloc] initWithFrame:CGRectMake(0, 0, 120, 45)];
+
+    tools.opaque = NO;
+    tools.backgroundColor = [UIColor clearColor];
+    tools.clearsContextBeforeDrawing = YES;
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
+    
+    UIBarButtonItem *showButton = [[UIBarButtonItem alloc] initWithTitle:@"详参" style:UIBarButtonItemStyleBordered target:self action:@selector(showStyle:)];
+    
+    UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithTitle:@"筛选" style:UIBarButtonItemStyleBordered target:self action:@selector(filterPhone:)];
+    
+    [buttons addObject:showButton];
+
+    [buttons addObject:filterButton];
+
+    [tools setItems:buttons animated:NO];
+
+    UIBarButtonItem *myBtn = [[UIBarButtonItem alloc] initWithCustomView:tools];
+    NSLog(@"%@\n%@",tools,self.navigationController.navigationBar);
+    self.navigationItem.rightBarButtonItem = myBtn;
+    
+
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
+    self.navigationItem.leftBarButtonItem = leftButton;
+//    self.navigationController.navigationBar
+    
+    
     
     //
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button addTarget:self
-               action:@selector(filterPhone:)
-     forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"过滤" forState:UIControlStateNormal];
-    button.frame = CGRectMake(240.0, 20, 60.0, 24.0);
-    [self.view addSubview:button];
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    [button addTarget:self
+//               action:@selector(filterPhone:)
+//     forControlEvents:UIControlEventTouchUpInside];
+//    [button setTitle:@"过滤" forState:UIControlStateNormal];
+//    button.frame = CGRectMake(240.0, 20, 60.0, 24.0);
+//    [self.view addSubview:button];
     
     //
-    listView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height-44) style:UITableViewStylePlain];
+    listView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, XD_SCREENWIDTH, self.view.bounds.size.height-self.navigationController.navigationBar.frame.size.height) style:UITableViewStylePlain];
 	listView.dataSource = self;
 	listView.delegate = self;
     [self.view addSubview:listView];
     
+    //
+    countLabel = [[UILabel alloc]init];
+    countLabel.backgroundColor = RGB(133, 133, 133);
+    countLabel.frame = CGRectMake((XD_SCREENWIDTH-100)/2, XD_SCREENHEIGHT-24-44, 100, 24);
+    countLabel.textAlignment = UITextAlignmentCenter;
+    countLabel.text = @"共0条";
+    [self.view addSubview:countLabel];
+    
+    //init data
+    cellStyle = NO;
     AllPerson = [[NSMutableArray alloc] init];
     filterPerson = [[NSMutableArray alloc] init];
     
@@ -89,6 +124,20 @@
 }
 
 #pragma mark Events
+
+- (void)refresh:(id)sender
+{
+    [AllPerson removeAllObjects];
+    [self initAddress];
+    [self filterPersonTouchUp];
+    [listView reloadData];
+}
+
+- (void)showStyle:(id)sender
+{
+    cellStyle = !cellStyle;
+    [listView reloadData];
+}
 
 - (void) filterPhone:(id)sender
 {
@@ -235,13 +284,13 @@
             //        NSString *note = (NSString*)ABRecordCopyValue(person, kABPersonNoteProperty);
             //        if(note != nil)
             //            textView.text = [textView.text stringByAppendingFormat:@"%@\n",note];
-            //        //第一次添加该条记录的时间
-            //        NSString *firstknow = (NSString*)ABRecordCopyValue(person, kABPersonCreationDateProperty);
-            //        NSLog(@"第一次添加该条记录的时间%@\n",firstknow);
+            //第一次添加该条记录的时间
+            NSString *firstknow = (NSString*)CFBridgingRelease(ABRecordCopyValue(person, kABPersonCreationDateProperty));
+            [personDic setValue:firstknow forKey:@"firstUpdateTime"];
             
             //最后一次修改該条记录的时间
             NSString *lastknow = (NSString*)CFBridgingRelease(ABRecordCopyValue(person, kABPersonModificationDateProperty));
-            [personDic setValue:middlename forKey:@"lastUpdateTime"];
+            [personDic setValue:lastknow forKey:@"lastUpdateTime"];
             //
                 //获取email多值
             ABMultiValueRef email = ABRecordCopyValue(person, kABPersonEmailProperty);
@@ -335,7 +384,8 @@
             //获取社交多值
             ABMultiValueRef social = ABRecordCopyValue(person, kABPersonSocialProfileProperty);
             //                    NSLog(@"ABMultiValueGetCount(instantMessage) = %ld",ABMultiValueGetCount(social));
-            NSMutableArray * socialArray = [[NSMutableArray alloc]init];
+            NSMutableArray * socialArraySina = [[NSMutableArray alloc]init];
+            NSMutableArray * socialArrayFacebook = [[NSMutableArray alloc]init];
             for (int l = 0; l < ABMultiValueGetCount(social); l++)
             {
                 //获取IM Label
@@ -347,17 +397,21 @@
                 //                        if(username != nil)
                 //                            textView.text = [textView.text stringByAppendingFormat:@"username：%@\n",username];
                 
-                NSString* service = [instantMessageContent valueForKey:(NSString *)kABPersonSocialProfileServiceSinaWeibo];//kABPersonInstantMessageServiceKey
+                NSString* service = [instantMessageContent valueForKey:(NSString *)kABPersonInstantMessageServiceKey];//kABPersonSocialProfileServiceSinaWeibo
                 //                        if(service != nil)
                 //                            textView.text = [textView.text stringByAppendingFormat:@"service：%@\n",service];
-//                NSLog(@"%@=%@=@=%@",instantMessageLabel,instantMessageContent,username,service);
-                
-                if (username) {
-                    [socialArray addObject:username];
+//                NSLog(@"%@=%@=%@=%@ = %@",instantMessageLabel,instantMessageContent,username,service,kABPersonSocialProfileServiceSinaWeibo);
+                NSDictionary * personDic = [NSDictionary dictionaryWithObjects:
+                                            [NSArray arrayWithObjects:(NSString *)kABPersonSocialProfileServiceSinaWeibo,username,nil] forKeys:[NSArray arrayWithObjects:@"social",@"username",nil]];
+                if ([service isEqualToString:(NSString *)kABPersonSocialProfileServiceSinaWeibo]) {
+                    [socialArraySina addObject:username];
+                } else if ([service isEqualToString:(NSString *)kABPersonSocialProfileServiceFacebook]) {
+                    [socialArrayFacebook addObject:username];
                 }
                 
             }
-            [personDic setValue:[socialArray copy] forKey:@"sina"];
+            [personDic setValue:[socialArraySina copy] forKey:@"sina"];
+            [personDic setValue:[socialArrayFacebook copy] forKey:@"facebook"];
             
             //读取电话多值
             ABMultiValueRef phone = ABRecordCopyValue(person, kABPersonPhoneProperty);
@@ -416,6 +470,13 @@
         
         [filterPerson removeAllObjects];
         
+        for (int i=0; i<[AllPerson count]; i++) {
+            if ([[[AllPerson objectAtIndex:i] objectForKey:@"facebook"] count]>0) {
+                [filterPerson addObject:[AllPerson objectAtIndex:i]];
+            }
+            
+        }
+        
     } else if (filterType == XD_ENUM_FILTER_TYPE_PHOTO) {
         
         [filterPerson removeAllObjects];
@@ -439,6 +500,39 @@
             
         }
         
+    } else if (filterType == XD_ENUM_FILTER_TYPE_LAST_UPDATE) {
+        
+        [filterPerson removeAllObjects];
+       
+//        NSDateFormatter *formater = [[ NSDateFormatter alloc] init];
+//        [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        NSDate *date=[formater dateFromString:@"2011-04-22 11:03:38"];
+//        NSLog(@"%@",date);
+//        
+//        
+//        NSDate *curDate = [NSDate date];//获取当前日期
+//        [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];//这里去掉 具体时间 保留日期
+//        NSString * curTime = [formater stringFromDate:curDate];
+//        NSLog(@"%@",curTime);
+//        
+//        NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+//        [formater setTimeZone:timeZone];
+        
+        NSDateFormatter *formater = [[ NSDateFormatter alloc] init];
+
+
+        NSDate *curDate = [NSDate date];//获取当前日期
+        [formater setDateFormat:@"yyyy-MM-dd"];//这里去掉 具体时间 保留日期
+        NSString * curTime = [formater stringFromDate:curDate];
+        
+        
+        for (int i=0; i<[AllPerson count]; i++) {
+            if ([[NSString stringWithFormat:@"%@",[[AllPerson objectAtIndex:i] objectForKey:@"lastUpdateTime"]] hasPrefix:curTime]) {
+                [filterPerson addObject:[AllPerson objectAtIndex:i]];
+            }
+            
+        }
+        
     } else {
         
         filterPerson = [NSMutableArray arrayWithArray:AllPerson];
@@ -451,51 +545,144 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"[filterPerson count] = %d",[filterPerson count]);
-    countLabel.text = [NSString stringWithFormat:@"%d条",[filterPerson count]];
+    countLabel.text = [NSString stringWithFormat:@"共%d条",[filterPerson count]];
     return [filterPerson count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70.f;
+    return cellStyle ? 170.f : 70.f;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"cell";
+    static NSString *CellIdentifierLine = @"linecell";
+    static NSString *CellIdentifierList = @"listcell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    AddressListCell *listcell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierList];
+    AddressLineCell *linecell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierLine];
     
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    if (cellStyle) {
         
-        cell.textLabel.font = [UIFont systemFontOfSize:16];
-        cell.textLabel.textColor = [UIColor blackColor];
+        if (listcell == nil) {
+            listcell = [[AddressListCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+            
+            listcell.textLabel.font = [UIFont systemFontOfSize:16];
+            listcell.textLabel.textColor = [UIColor blackColor];
+            
+            NSString * fName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"firstName"];
+            NSString * lName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"lastname"];
+            NSString * mName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"middlename"];
+            NSString * uName = [NSString stringWithFormat:@"%@%@%@",
+                                lName ? lName : @"",
+                                mName ? mName : @"",
+                                fName ? fName : @""
+                                ];
+            UIImage * uPhoto = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"image"];
+            
+
+            NSArray * socialArray = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"facebook"];
+            NSString * facebookName = [socialArray count]>0 ? [socialArray objectAtIndex:0] :@"";
+            
+            NSArray * socialArray2 = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"sina"];
+            NSString * sinaName = [socialArray2 count]>0 ? [socialArray2 objectAtIndex:0] :@"";
+            
+            NSArray * phones = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"phone"];
+            NSString * phone = [NSString stringWithFormat:@"%@",[phones count]>0?[phones objectAtIndex:0]:@""];
+            
+            NSArray * mailArray = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"email"];
+            NSString * mail = [mailArray count]>0 ? [mailArray objectAtIndex:0] : @"";
+            NSString * first = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"firstUpdateTime"];
+            NSString * last = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"lastUpdateTime"];
+            
+            listcell.userName.text = uName;
+            listcell.userPhone.text = phone;
+            listcell.userMail.text = mail;
+            listcell.userSina.text = sinaName;
+            listcell.userFacebook.text = facebookName;
+            listcell.userPhoto.image = uPhoto;
+            listcell.userCreateDate.text = [NSString stringWithFormat:@"%@",first];
+            listcell.userUpdateDate.text = [NSString stringWithFormat:@"%@",last];
+        }
+        return listcell;
         
-        NSString * fName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"firstName"];
-        NSString * lName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"lastname"];
-        NSString * mName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"middlename"];
+    } else {
         
-        UIImageView *myImage = [[UIImageView alloc] initWithFrame:CGRectMake(250, 10, 50, 50)];
-        [myImage setImage:[[filterPerson objectAtIndex:indexPath.row] objectForKey:@"image"]];
-        myImage.opaque = YES;
         
-//        cell.imageView.image = [[AllPerson objectAtIndex:indexPath.row] objectForKey:@"image"];
-        NSArray * socialArray = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"sina"];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@%@%@\t%@",
-                               lName ? lName : @"",
-                               mName ? mName : @"",
-                               fName ? fName : @"",
-                               [socialArray count]>0 ? [socialArray objectAtIndex:0] :@""
-                               ];
-        NSArray * phones = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"phone"];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[phones count]>0?[phones objectAtIndex:0]:@""];
-        [cell addSubview:myImage];
+        if (linecell == nil) {
+            linecell = [[AddressLineCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+            
+            linecell.textLabel.font = [UIFont systemFontOfSize:16];
+            linecell.textLabel.textColor = [UIColor blackColor];
+            
+            //
+            NSString * fName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"firstName"];
+            NSString * lName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"lastname"];
+            NSString * mName = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"middlename"];
+            NSString * uName = [NSString stringWithFormat:@"%@%@%@",
+                                lName ? lName : @"",
+                                mName ? mName : @"",
+                                fName ? fName : @""
+                                ];
+            UIImage * uPhoto = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"image"];
+            
+            
+            NSArray * socialArray = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"facebook"];
+            NSString * facebookName = [socialArray count]>0 ? [socialArray objectAtIndex:0] :@"";
+            
+            NSArray * socialArray2 = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"sina"];
+            NSString * sinaName = [socialArray2 count]>0 ? [socialArray2 objectAtIndex:0] :@"";
+            
+            NSArray * phones = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"phone"];
+            NSString * phone = [NSString stringWithFormat:@"%@",[phones count]>0?[phones objectAtIndex:0]:@""];
+            
+            NSArray * mailArray = [[filterPerson objectAtIndex:indexPath.row] objectForKey:@"email"];
+            NSString * mail = [mailArray count]>0 ? [mailArray objectAtIndex:0] : @"";
+            
+            
+            
+            linecell.userName.text = uName;
+            
+            if (filterType == XD_ENUM_FILTER_TYPE_SINA) {
+                
+                
+                linecell.userSubtext.text  = sinaName;
+                
+            } else if (filterType == XD_ENUM_FILTER_TYPE_FACEBOOK) {
+                
+                linecell.userSubtext.text  = facebookName;
+                
+            } else if (filterType == XD_ENUM_FILTER_TYPE_PHOTO) {
+                
+                linecell.userSubtext.text  = phone;
+                linecell.userPhoto.image = uPhoto;
+                
+            } else if (filterType == XD_ENUM_FILTER_TYPE_MAIL) {
+                
+                linecell.userSubtext.text  = mail;
+                
+            } else if (filterType == XD_ENUM_FILTER_TYPE_LAST_UPDATE) {
+                
+                linecell.userSubtext.text  = sinaName;
+                
+            } else {
+                
+                linecell.userSubtext.text  = phone;
+            }
+            
+        }
+        return linecell;
+        
         
     }
-    return cell;
+    
 }
+
+//-(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+//{
+//    return [NSArray arrayWithObjects:@"周",@"王",@"李",@"我", nil];
+//    //通过key来索引
+//}
 
 //picker
 #pragma mark Picker
@@ -517,6 +704,9 @@
         case 4:
             returnStr = @"有邮件";
             break;
+        case 5:
+            returnStr = @"今日修改";
+            break;
             
         default:
             break;
@@ -534,7 +724,7 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     
-    return 5;
+    return 6;
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -574,6 +764,9 @@
             break;
         case 4:
             filterType = XD_ENUM_FILTER_TYPE_MAIL;
+            break;
+        case 5:
+            filterType = XD_ENUM_FILTER_TYPE_LAST_UPDATE;
             break;
         default:
             filterType = XD_ENUM_FILTER_TYPE_ALL;

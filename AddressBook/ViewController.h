@@ -17,7 +17,8 @@ typedef enum
     XD_ENUM_FILTER_TYPE_SINA,
     XD_ENUM_FILTER_TYPE_FACEBOOK,
     XD_ENUM_FILTER_TYPE_PHOTO,
-    XD_ENUM_FILTER_TYPE_MAIL
+    XD_ENUM_FILTER_TYPE_MAIL,
+    XD_ENUM_FILTER_TYPE_LAST_UPDATE
 } XD_ENUM_FILTER_TYPE;
 
 @interface ViewController : UIViewController<ABPeoplePickerNavigationControllerDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate>
@@ -31,6 +32,7 @@ typedef enum
     int pickerSelectedRow;
     
     UILabel * countLabel;
+    BOOL cellStyle;
 }
 
 @property(nonatomic,retain) NSMutableArray * AllPerson;
