@@ -527,7 +527,7 @@
         
         
         for (int i=0; i<[AllPerson count]; i++) {
-            if ([[NSString stringWithFormat:@"%@",[[AllPerson objectAtIndex:i] objectForKey:@"lastUpdateTime"]] hasPrefix:curTime]) {
+            if ([[NSString stringWithFormat:@"%@",[[AllPerson objectAtIndex:i] objectForKey:@"firstUpdateTime"]] hasPrefix:curTime]) {//lastUpdateTime
                 [filterPerson addObject:[AllPerson objectAtIndex:i]];
             }
             
@@ -705,7 +705,7 @@
             returnStr = @"有邮件";
             break;
         case 5:
-            returnStr = @"今日修改";
+            returnStr = @"今日添加";
             break;
             
         default:
